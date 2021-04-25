@@ -1,0 +1,36 @@
+//
+// Fonts
+//
+
+@font-face {
+  font-family: 'ManropeRegular';
+  src: url('../../../assets/fonts/Manrope-Regular.eot');
+  src: url('../../../assets/fonts/Manrope-Regular.eot?#iefix') format('embedded-opentype'),
+      url('../../../assets/fonts/Manrope-Regular.woff2') format('woff2'),
+      url('../../../assets/fonts/Manrope-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ManropeBold';
+  src: url('../../../assets/fonts/Manrope-Bold.eot');
+  src: url('../../../assets/fonts/Manrope-Bold.eot?#iefix') format('embedded-opentype'),
+      url('../../../assets/fonts/Manrope-Bold.woff2') format('woff2'),
+      url('../../../assets/fonts/Manrope-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ManropeLight';
+  src: url('../../../assets/fonts/Manrope-Light.eot');
+  src: url('../../../assets/fonts/Manrope-Light.eot?#iefix') format('embedded-opentype'),
+      url('../../../assets/fonts/Manrope-Light.woff2') format('woff2'),
+      url('../../../assets/fonts/Manrope-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
