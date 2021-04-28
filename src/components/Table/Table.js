@@ -49,14 +49,14 @@ Table.TH = ({ children, ...rest}) => {
   )
 };
 
-Table.TR = ({children, ...rest}, props) => {
+Table.TR = ({onClick, children, ...rest}, props) => {
 
-  const {colspan} = props
+  // const {onClick} = props;
 
   return (
     <StyledTr
-      colspan={colspan}
       {...rest}
+      onClick={onClick}
     >
       {children}
     </StyledTr>

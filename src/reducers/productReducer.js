@@ -1,6 +1,4 @@
-import { products } from "../data/products";
-
-export const productReducer = ( state = [products], action ) => {
+export const productReducer = ( state = [], action ) => {
   switch (action.type) {
     case 'add':
       return [...state, action.payload];

@@ -3,7 +3,7 @@ import { StyledInputIcon } from './InputIcon.styles';
 
 export const InputIcon = (props) => {
 
-  const {type, id, name, placeholder } = props
+  const {type, id, name, placeholder, value, onChange} = props
 
   return (
     <StyledInputIcon
@@ -11,6 +11,8 @@ export const InputIcon = (props) => {
       id={id}
       name={name}
       placeholder={placeholder}
+      value={value}
+      onChange={onChange}
     >
     </StyledInputIcon>
   )

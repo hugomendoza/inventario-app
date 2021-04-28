@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { InputIcon } from '../../components/InputIcon';
@@ -11,47 +11,58 @@ import { FiMinus } from "react-icons/fi";
 import { StyledColumn, StyledContainer, StyledGrid, StyledForm, StyledFormGroup } from './HomeScreen.styles';
 import { useForm } from '../../hooks/useForm';
 import { productReducer } from '../../reducers/productReducer';
-import { products } from '../../data/products';
 import { Alert } from '../../components/Alert/Alert';
 
 const init = () => {
-  return JSON.parse(localStorage.getItem('products')) || [products];
+  return JSON.parse(localStorage.getItem('products')) || [];
 };
+
 
 export const HomeScreen = () => {
 
   const [ products, dispatch ] = useReducer(productReducer, [], init);
 
+  const [searchProduct, setSearchProduct] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [activeProduct, setActiveProduct] = useState([]);
+  const [activeCount, setActiveCount] = useState();
+
+  const { actualName, actualPrice, actualQuantity, actualDescription, actualId } = activeProduct;
+
+
   useEffect( ()=> {
     localStorage.setItem('products', JSON.stringify( products ));
-  }, [products]);
 
+    const results = products.filter( product => product.name.toLocaleLowerCase().includes(searchProduct.toLocaleLowerCase()) );
+    setSearchResults(results);
+
+  }, [searchProduct, products]);
+    
   const [{name, price, quantity, description}, handleInputChange, reset ] = useForm({
     name: '',
     price: '',
     quantity: '',
-    description: ''
+    description: '',
   });
-
+    
   const handleAddProduct = (newProduct) => {
     dispatch({
       type: "add",
       payload: newProduct
     });
   };
-
+  
   const handleDelete = (productId) => {
     const action = {
       type: 'delete',
       payload: productId
     }
-
+    
     dispatch(action);
-    console.log(productId);
-  }
-
+  };
+    
   const handleSubmit = (e) => {
-
+      
     e.preventDefault();
     
     const newProduct = {
@@ -61,11 +72,31 @@ export const HomeScreen = () => {
       quantity: quantity,
       description: description
     };
-
+  
     handleAddProduct(newProduct);
-
+  
     reset();
+    
+  };
+  
+  const handleFilter = (e) => {
+    setSearchProduct(e.target.value);
+  };
 
+  const handleActiveEvent = (product) => {
+    const actualProduct = {
+      actualId: product.id,
+      actualName: product.name,
+      actualPrice: product.price,
+      actualQuantity: product.quantity,
+      actualDescription: product.description
+    };
+    setActiveProduct(actualProduct);
+  }
+
+  const handleAdd = (value) => {
+
+    setActiveCount(activeCount + 1);
   }
 
   return (
@@ -145,11 +176,13 @@ export const HomeScreen = () => {
           >
             listado de productos
           </Typography>
-          <StyledForm>
-            <StyledGrid className="mt-4">
-              <InputIcon placeholder="Filtrar..." />
-            </StyledGrid>
-          </StyledForm>
+          <StyledGrid className="mt-4">
+            <InputIcon
+              placeholder="Filtrar..."
+              value={searchProduct}
+              onChange={handleFilter}
+            />
+          </StyledGrid>
 
 
           {
@@ -171,8 +204,8 @@ export const HomeScreen = () => {
                   {
                     <Table.Body>
                       {
-                        products.map (product => (
-                          <Table.TR key={product.id}>
+                        searchResults.map (product => (
+                          <Table.TR key={product.id} className="cursor-pointer" onClick={() => handleActiveEvent(product)}>
                             <Table.TD>{product.name}</Table.TD>
                             <Table.TD className="text-left">{product.description}</Table.TD>
                             <Table.TD>${product.price}</Table.TD>
@@ -203,47 +236,55 @@ export const HomeScreen = () => {
           >
             detalle
           </Typography>
-          <StyledGrid>
-            <StyledColumn className="w-1/2">
-              <Typography
-                variant="h3"
-              >
-                Leche
-              </Typography>
-              <Typography
-                variant="label"
-                className="mb-2"
-              >
-                $2.500
-              </Typography>
-              <Typography
-              >
-                Descripción del producto
-              </Typography>
+            {
+              (actualId > 0)
+              ?
+              <StyledGrid>
+              <StyledColumn className="w-1/2">
+                <Typography
+                  variant="h3"
+                >
+                  {actualName}
+                </Typography>
+                <Typography
+                  variant="label"
+                  className="mb-2"
+                >
+                  ${actualPrice}
+                </Typography>
+                <Typography
+                >
+                  {actualDescription}
+                </Typography>
 
-            </StyledColumn>
-            <StyledColumn className="w-1/2">
-              <Typography
-                variant="labelRound"
-              >
-                100
-              </Typography>
-              <StyledGrid className="justify-center mt-4">
-                <Button
-                  label={<FiMinus className="mx-auto"/>}
-                  variant="minus"
-                  className="w-8"
+              </StyledColumn>
+              <StyledColumn className="w-1/2">
+                <Typography
+                  variant="labelRound"
                 >
-                </Button>
-                <Button
-                  label={<IoAddSharp className="mx-auto"/>}
-                  variant="add"
-                  className="w-8"
-                >
-                </Button>
+                  {actualQuantity}
+                </Typography>
+                <StyledGrid className="justify-center mt-4">
+                  <Button
+                    label={<FiMinus className="mx-auto"/>}
+                    variant="minus"
+                    className="w-8"
+                    onClick={() => handleAdd(actualQuantity)}
+                  >
+                  </Button>
+                  <Button
+                    label={<IoAddSharp className="mx-auto"/>}
+                    variant="add"
+                    className="w-8"
+                  >
+                  </Button>
+                </StyledGrid>
+              </StyledColumn>
               </StyledGrid>
-            </StyledColumn>
-          </StyledGrid>
+              :
+              <Alert label={"Selecciona un producto de la lista"}>
+              </Alert>
+            }
         </StyledColumn>
 
       </StyledGrid>
