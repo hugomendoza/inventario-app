@@ -24,10 +24,10 @@ export const HomeScreen = () => {
 
   const [searchProduct, setSearchProduct] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [activeProduct, setActiveProduct] = useState([]);
-  const [activeCount, setActiveCount] = useState();
+  const [activeProduct, setActiveProduct] = useState(products);
+  const [newQuantity, setNewQuantity] = useState(products)
 
-  const { actualName, actualPrice, actualQuantity, actualDescription, actualId } = activeProduct;
+  const { actualIndex, actualName, actualPrice, actualQuantity, actualDescription, actualId } = activeProduct;
 
 
   useEffect( ()=> {
@@ -36,7 +36,7 @@ export const HomeScreen = () => {
     const results = products.filter( product => product.name.toLocaleLowerCase().includes(searchProduct.toLocaleLowerCase()) );
     setSearchResults(results);
 
-  }, [searchProduct, products]);
+  }, [searchProduct, products, newQuantity, activeProduct]);
     
   const [{name, price, quantity, description}, handleInputChange, reset ] = useForm({
     name: '',
@@ -83,21 +83,45 @@ export const HomeScreen = () => {
     setSearchProduct(e.target.value);
   };
 
-  const handleActiveEvent = (product) => {
+  const handleActiveEvent = (index) => {
+
+    const indexProduct = [...products];
+
     const actualProduct = {
-      actualId: product.id,
-      actualName: product.name,
-      actualPrice: product.price,
-      actualQuantity: product.quantity,
-      actualDescription: product.description
+      actualIndex: index,
+      actualId: indexProduct[index].id,
+      actualName: indexProduct[index].name,
+      actualPrice: indexProduct[index].price,
+      actualQuantity: parseFloat(indexProduct[index].quantity),
+      actualDescription: indexProduct[index].description
     };
     setActiveProduct(actualProduct);
-  }
+  };
 
-  const handleAdd = (value) => {
+  const handleQuantityIncrease = (index) => {
+    
+    const modifyActualQuantity = activeProduct;
+    modifyActualQuantity.actualQuantity++;
 
-    setActiveCount(activeCount + 1);
-  }
+    const modifyQuantity = [...newQuantity];
+    modifyQuantity[index].quantity++;
+
+    setNewQuantity(modifyQuantity);
+    setActiveProduct(modifyActualQuantity);
+
+  };
+
+  const handleQuantityDecrease = (index) => {
+
+    const modifyActualQuantity = activeProduct;
+    modifyActualQuantity.actualQuantity--;
+
+    const modifyQuantity = [...newQuantity];
+    modifyQuantity[index].quantity--;
+    
+    setNewQuantity(modifyQuantity);
+    setActiveProduct(modifyActualQuantity);
+  };
 
   return (
     <StyledContainer>
@@ -204,10 +228,10 @@ export const HomeScreen = () => {
                   {
                     <Table.Body>
                       {
-                        searchResults.map (product => (
-                          <Table.TR key={product.id} className="cursor-pointer" onClick={() => handleActiveEvent(product)}>
+                        searchResults.map ((product, index) => (
+                          <Table.TR key={product.id} className="cursor-pointer" onClick={() => handleActiveEvent(index)}>
                             <Table.TD>{product.name}</Table.TD>
-                            <Table.TD className="text-left">{product.description}</Table.TD>
+                            <Table.TD className="text-left truncate overflow-hidden max-w-0">{product.description}</Table.TD>
                             <Table.TD>${product.price}</Table.TD>
                             <Table.TD>{product.quantity}</Table.TD>
                             <Table.TD className="text-center">
@@ -227,8 +251,8 @@ export const HomeScreen = () => {
             </Table>
           }
 
-
         </StyledColumn>
+
         
         <StyledColumn>
           <Typography
@@ -269,13 +293,14 @@ export const HomeScreen = () => {
                     label={<FiMinus className="mx-auto"/>}
                     variant="minus"
                     className="w-8"
-                    onClick={() => handleAdd(actualQuantity)}
+                    onClick={() => handleQuantityDecrease(actualIndex)}
                   >
                   </Button>
                   <Button
                     label={<IoAddSharp className="mx-auto"/>}
                     variant="add"
                     className="w-8"
+                    onClick={() => handleQuantityIncrease(actualIndex)}
                   >
                   </Button>
                 </StyledGrid>
