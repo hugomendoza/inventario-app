@@ -12,6 +12,7 @@ import { StyledColumn, StyledContainer, StyledGrid, StyledForm, StyledFormGroup 
 import { useForm } from '../../hooks/useForm';
 import { productReducer } from '../../reducers/productReducer';
 import { Alert } from '../../components/Alert/Alert';
+import { Nav } from '../../components/Nav';
 
 const init = () => {
   return JSON.parse(localStorage.getItem('products')) || [];
@@ -124,195 +125,198 @@ export const HomeScreen = () => {
   };
 
   return (
-    <StyledContainer>
-      <Typography
-        variant="h1"
-      >
-        Inventario App
-      </Typography>
-      
-      <StyledColumn>
+    <>
+      <Nav></Nav>
+      <StyledContainer>
         <Typography
-          variant="h2"
+          variant="h1"
         >
-          nuevo producto
+          Inventario App
         </Typography>
-
-        <StyledForm onSubmit={handleSubmit}>
-          <StyledGrid>
-            <StyledFormGroup className="w-1/2 pr-2 mt-2">
-              <Label value={`Nombre producto`}></Label>
-              <Input
-                type="text"
-                name="name"
-                placeholder="Ingresa el nombre del producto"
-                value={name}
-                onChange={handleInputChange}
-              />
-            </StyledFormGroup>
-            <StyledFormGroup className="w-1/4 mt-2">
-              <Label value={`Precio`}></Label>
-              <Input
-                type="text"
-                name="price"
-                placeholder="Precio"
-                value={price}
-                onChange={handleInputChange}
-              />
-            </StyledFormGroup>
-            <StyledFormGroup className="w-1/4 mt-2 pl-2">
-              <Label value={`Cantidad`}></Label>
-              <Input
-                type="text"
-                name="quantity"
-                placeholder="Cantidad"
-                value={quantity}
-                onChange={handleInputChange}
-              />
-            </StyledFormGroup>
-            <StyledFormGroup className="w-3/4 pr-2 mt-2">
-              <Label value={`Descripción`}></Label>
-              <Textarea
-                name="description"
-                placeholder="Describa el producto"
-                value={description}
-                onChange={handleInputChange}
-              />
-            </StyledFormGroup>
-            <StyledFormGroup className="w-1/4 pl-2 mt-2">
-              <Button
-                type="submit"
-                label="Agregar"
-                className="w-full"
-              >
-              </Button>
-            </StyledFormGroup>
-          </StyledGrid>
-        </StyledForm>
-
-      </StyledColumn>
-      
-      <StyledGrid>
         
         <StyledColumn>
           <Typography
             variant="h2"
           >
-            listado de productos
+            nuevo producto
           </Typography>
-          <StyledGrid className="mt-4">
-            <InputIcon
-              placeholder="Filtrar..."
-              value={searchProduct}
-              onChange={handleFilter}
-            />
-          </StyledGrid>
 
-
-          {
-            (products.length === 0)
-            ?
-            <Alert label={"Ingresa productos al inventario"}>
-            </Alert>
-            :
-            <Table className="mt-4">
-              <Table.Head>
-                <Table.TR>
-                  <Table.TH>Nombre</Table.TH>
-                  <Table.TH>Descripción</Table.TH>
-                  <Table.TH>Precio</Table.TH>
-                  <Table.TH>Cant.</Table.TH>
-                  <Table.TH>Borrar</Table.TH>
-                </Table.TR>
-              </Table.Head>
-                  {
-                    <Table.Body>
-                      {
-                        searchResults.map ((product, index) => (
-                          <Table.TR key={product.id} className="cursor-pointer" onClick={() => handleActiveEvent(index)}>
-                            <Table.TD>{product.name}</Table.TD>
-                            <Table.TD className="text-left truncate overflow-hidden max-w-0">{product.description}</Table.TD>
-                            <Table.TD>${product.price}</Table.TD>
-                            <Table.TD>{product.quantity}</Table.TD>
-                            <Table.TD className="text-center">
-                              <Button
-                                label={<IoCloseOutline className="mx-auto"/>}
-                                variant="danger"
-                                className="w-6 text-center mx-auto"
-                                onClick={ () => handleDelete(product.id)}
-                              >
-                              </Button>
-                            </Table.TD>
-                          </Table.TR>
-                        ))
-                      }
-                    </Table.Body>
-                  }
-            </Table>
-          }
+          <StyledForm onSubmit={handleSubmit}>
+            <StyledGrid>
+              <StyledFormGroup className="w-1/2 pr-2 mt-2">
+                <Label value={`Nombre producto`}></Label>
+                <Input
+                  type="text"
+                  name="name"
+                  placeholder="Ingresa el nombre del producto"
+                  value={name}
+                  onChange={handleInputChange}
+                />
+              </StyledFormGroup>
+              <StyledFormGroup className="w-1/4 mt-2">
+                <Label value={`Precio`}></Label>
+                <Input
+                  type="text"
+                  name="price"
+                  placeholder="Precio"
+                  value={price}
+                  onChange={handleInputChange}
+                />
+              </StyledFormGroup>
+              <StyledFormGroup className="w-1/4 mt-2 pl-2">
+                <Label value={`Cantidad`}></Label>
+                <Input
+                  type="text"
+                  name="quantity"
+                  placeholder="Cantidad"
+                  value={quantity}
+                  onChange={handleInputChange}
+                />
+              </StyledFormGroup>
+              <StyledFormGroup className="w-3/4 pr-2 mt-2">
+                <Label value={`Descripción`}></Label>
+                <Textarea
+                  name="description"
+                  placeholder="Describa el producto"
+                  value={description}
+                  onChange={handleInputChange}
+                />
+              </StyledFormGroup>
+              <StyledFormGroup className="w-1/4 pl-2 mt-2">
+                <Button
+                  type="submit"
+                  label="Agregar"
+                  className="w-full"
+                >
+                </Button>
+              </StyledFormGroup>
+            </StyledGrid>
+          </StyledForm>
 
         </StyledColumn>
-
         
-        <StyledColumn>
-          <Typography
-            variant="h2"
-          >
-            detalle
-          </Typography>
+        <StyledGrid>
+          
+          <StyledColumn>
+            <Typography
+              variant="h2"
+            >
+              listado de productos
+            </Typography>
+            <StyledGrid className="mt-4">
+              <InputIcon
+                placeholder="Filtrar..."
+                value={searchProduct}
+                onChange={handleFilter}
+              />
+            </StyledGrid>
+
+
             {
-              (actualId > 0)
+              (products.length === 0)
               ?
-              <StyledGrid>
-              <StyledColumn className="w-1/2">
-                <Typography
-                  variant="h3"
-                >
-                  {actualName}
-                </Typography>
-                <Typography
-                  variant="label"
-                  className="mb-2"
-                >
-                  ${actualPrice}
-                </Typography>
-                <Typography
-                >
-                  {actualDescription}
-                </Typography>
-
-              </StyledColumn>
-              <StyledColumn className="w-1/2">
-                <Typography
-                  variant="labelRound"
-                >
-                  {actualQuantity}
-                </Typography>
-                <StyledGrid className="justify-center mt-4">
-                  <Button
-                    label={<FiMinus className="mx-auto"/>}
-                    variant="minus"
-                    className="w-8"
-                    onClick={() => handleQuantityDecrease(actualIndex)}
-                  >
-                  </Button>
-                  <Button
-                    label={<IoAddSharp className="mx-auto"/>}
-                    variant="add"
-                    className="w-8"
-                    onClick={() => handleQuantityIncrease(actualIndex)}
-                  >
-                  </Button>
-                </StyledGrid>
-              </StyledColumn>
-              </StyledGrid>
-              :
-              <Alert label={"Selecciona un producto de la lista"}>
+              <Alert label={"Ingresa productos al inventario"}>
               </Alert>
+              :
+              <Table className="mt-4">
+                <Table.Head>
+                  <Table.TR>
+                    <Table.TH>Nombre</Table.TH>
+                    <Table.TH>Descripción</Table.TH>
+                    <Table.TH>Precio</Table.TH>
+                    <Table.TH>Cant.</Table.TH>
+                    <Table.TH>Borrar</Table.TH>
+                  </Table.TR>
+                </Table.Head>
+                    {
+                      <Table.Body>
+                        {
+                          searchResults.map ((product, index) => (
+                            <Table.TR key={product.id} className="cursor-pointer" onClick={() => handleActiveEvent(index)}>
+                              <Table.TD>{product.name}</Table.TD>
+                              <Table.TD className="text-left truncate overflow-hidden max-w-0">{product.description}</Table.TD>
+                              <Table.TD>${product.price}</Table.TD>
+                              <Table.TD>{product.quantity}</Table.TD>
+                              <Table.TD className="text-center">
+                                <Button
+                                  label={<IoCloseOutline className="mx-auto"/>}
+                                  variant="danger"
+                                  className="w-6 text-center mx-auto"
+                                  onClick={ () => handleDelete(product.id)}
+                                >
+                                </Button>
+                              </Table.TD>
+                            </Table.TR>
+                          ))
+                        }
+                      </Table.Body>
+                    }
+              </Table>
             }
-        </StyledColumn>
 
-      </StyledGrid>
-    </StyledContainer>
+          </StyledColumn>
+
+          
+          <StyledColumn>
+            <Typography
+              variant="h2"
+            >
+              detalle
+            </Typography>
+              {
+                (actualId > 0)
+                ?
+                <StyledGrid>
+                <StyledColumn className="w-1/2">
+                  <Typography
+                    variant="h3"
+                  >
+                    {actualName}
+                  </Typography>
+                  <Typography
+                    variant="label"
+                    className="mb-2"
+                  >
+                    ${actualPrice}
+                  </Typography>
+                  <Typography
+                  >
+                    {actualDescription}
+                  </Typography>
+
+                </StyledColumn>
+                <StyledColumn className="w-1/2">
+                  <Typography
+                    variant="labelRound"
+                  >
+                    {actualQuantity}
+                  </Typography>
+                  <StyledGrid className="justify-center mt-4">
+                    <Button
+                      label={<FiMinus className="mx-auto"/>}
+                      variant="minus"
+                      className="w-8"
+                      onClick={() => handleQuantityDecrease(actualIndex)}
+                    >
+                    </Button>
+                    <Button
+                      label={<IoAddSharp className="mx-auto"/>}
+                      variant="add"
+                      className="w-8"
+                      onClick={() => handleQuantityIncrease(actualIndex)}
+                    >
+                    </Button>
+                  </StyledGrid>
+                </StyledColumn>
+                </StyledGrid>
+                :
+                <Alert label={"Selecciona un producto de la lista"}>
+                </Alert>
+              }
+          </StyledColumn>
+
+        </StyledGrid>
+      </StyledContainer>
+    </>
   )
 }
