@@ -19,6 +19,6 @@ export const Button = (props) => {
 };
 
 Button.propTypes = {
-  variant: PropTypes.oneOf(["danger", "add","minus"]),
+  variant: PropTypes.oneOf(["danger", "add", "minus", "profile"]),
 };
 

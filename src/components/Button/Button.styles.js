@@ -18,6 +18,8 @@ export const StyledButton = styled.button.attrs({
         return tw`bg-primary-500 hover:bg-primary-600`
       case "minus":
         return tw`bg-primary-300 hover:bg-primary-400`
+      case "profile":
+        return tw`px-4 bg-secondary-500 hover:bg-secondary-600`
       default:
         return tw``
     }

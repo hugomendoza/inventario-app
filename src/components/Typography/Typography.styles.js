@@ -16,6 +16,10 @@ export const StyledTypography = styled.p.attrs({
         return tw`text-sm border-b-2 border-secondary-200 uppercase text-secondary-500 font-sansBold`
       case "h3":
         return tw`text-lg text-terciary-700 font-sansRegular`
+      case "h4":
+        return tw`text-sm text-white font-sansRegular`
+      case "link":
+        return tw`text-xs text-primary-500 font-sansRegular text-center mt-4`
       case "label":
         return tw` text-base bg-primary-500 text-white p-1 px-2 table`
       case "labelRound":
